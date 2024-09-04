@@ -2,16 +2,31 @@ import React from 'react';
 import { Table, TableHeader, TableBody, TableRow, TableHead } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import useCartStore from '@/stores/useCartStore';
 import CartItem from './cart-item';
+import { CartItem as CartItemType } from '@/types/cartTypes';
 
-const CartItemList: React.FC = ({}) => {
-  const { items, removeAllProduct, toggleAllProducts } = useCartStore();
+interface CartItemListProps {
+  items: CartItemType[];
+  removeAllProduct: () => void;
+  toggleAllProducts: (selected: boolean) => void;
+  removeProduct: (id: number) => void;
+  updateProductQuantity: (id: number, quantity: number) => void;
+  updateProductSelection: (id: number, selected: boolean) => void;
+}
+
+const CartItemList: React.FC<CartItemListProps> = ({
+  items,
+  removeAllProduct,
+  toggleAllProducts,
+  removeProduct,
+  updateProductQuantity,
+  updateProductSelection,
+}) => {
   const allSelected = items.every((item) => item.selected);
 
   return (
     <div className="overflow-x-auto">
-      <Button onClick={() => removeAllProduct()}>전체삭제</Button>
+      <Button onClick={removeAllProduct}>전체삭제</Button>
       <Table className="min-w-full divide-y divide-gray-200">
         <TableHeader>
           <TableRow>
@@ -32,7 +47,13 @@ const CartItemList: React.FC = ({}) => {
         </TableHeader>
         <TableBody>
           {items.map((item) => (
-            <CartItem key={item.id} item={item} />
+            <CartItem
+              key={item.id}
+              item={item}
+              removeProduct={removeProduct}
+              updateProductQuantity={updateProductQuantity}
+              updateProductSelection={updateProductSelection}
+            />
           ))}
         </TableBody>
       </Table>

@@ -5,14 +5,20 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { CartItem as CartItemType } from '@/types/cartTypes';
 import { Checkbox } from '@/components/ui/checkbox';
-import useCartStore from '@/stores/useCartStore';
 
 interface CartItemProps {
   item: CartItemType;
+  removeProduct: (id: number) => void;
+  updateProductQuantity: (id: number, quantity: number) => void;
+  updateProductSelection: (id: number, selected: boolean) => void;
 }
 
-const CartItem: React.FC<CartItemProps> = ({ item }) => {
-  const { removeProduct, updateProductQuantity, updateProductSelection } = useCartStore();
+const CartItem: React.FC<CartItemProps> = ({
+  item,
+  removeProduct,
+  updateProductQuantity,
+  updateProductSelection,
+}) => {
   return (
     <TableRow className="hover:bg-gray-50">
       <TableCell className="text-center">
@@ -30,12 +36,12 @@ const CartItem: React.FC<CartItemProps> = ({ item }) => {
           type="number"
           value={item.selectNum}
           min={1}
-          onChange={(e) => updateProductQuantity(item.id, parseInt(e.target.value))}
+          onChange={(e) => updateProductQuantity(item.id, parseInt(e.target.value, 10))}
           className="w-20 rounded border text-center"
         />
       </TableCell>
       <TableCell className="text-left font-bold">
-        {(parseInt(item.price) * item.selectNum).toLocaleString()}원
+        {`${(parseInt(item.price, 10) * item.selectNum).toLocaleString()}원`}
       </TableCell>
       <TableCell className="text-left">{item.shippingInfo || '무료'}</TableCell>
       <TableCell className="text-left">
