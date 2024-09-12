@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState, useRef, Suspense } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import products from '@/data/products.json'; // Adjust path as necessary
@@ -7,6 +7,8 @@ import { Product } from '@/types/product-types';
 import { parseAndRoundPrice } from '@/lib/utils';
 import Breadcrumb from './components/breadcrumb';
 import { Button } from '@/components/ui/button';
+import Info from './components/info/info';
+import ReviewSection from './components/review/review-section';
 
 const categoryTranslation: { [key: string]: string } = {
   DOMESTIC: '국내도서',
