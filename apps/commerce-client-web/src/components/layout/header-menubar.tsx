@@ -37,39 +37,15 @@ const mock: MenuItem[] = [
     subMenu: [
       {
         title: '국내도서',
-        subSubMenu: [
-          { title: '소설' },
-          { title: '시' },
-          { title: '에세이' },
-          { title: '인문' },
-          { title: '역사' },
-          { title: '청소년' },
-          { title: '사회' },
-        ],
+        subSubMenu: [{ title: '소설' }, { title: '시' }, { title: '역사' }, { title: '과학' }],
       },
       {
         title: '외국도서',
-        subSubMenu: [
-          { title: '소설' },
-          { title: '시' },
-          { title: '에세이' },
-          { title: '인문' },
-          { title: '역사' },
-          { title: '청소년' },
-          { title: '사회' },
-        ],
+        subSubMenu: [{ title: '소설' }, { title: '시' }, { title: '역사' }, { title: '과학' }],
       },
       {
         title: 'eBook',
-        subSubMenu: [
-          { title: '소설' },
-          { title: '시' },
-          { title: '에세이' },
-          { title: '인문' },
-          { title: '역사' },
-          { title: '청소년' },
-          { title: '사회' },
-        ],
+        subSubMenu: [{ title: '소설' }, { title: '시' }, { title: '역사' }, { title: '과학' }],
       },
     ],
   },
