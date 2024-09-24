@@ -37,7 +37,7 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
   if (priceRange) {
     const [minPrice, maxPrice] = priceRange.split('-').map(Number);
     filteredBooks = filteredBooks.filter((book) => {
-      const discountedPrice = book.price - (book.discount ?? 0); // Calculate discounted price
+      const discountedPrice = book.discount;
       return discountedPrice >= minPrice && discountedPrice <= maxPrice;
     });
   }
@@ -65,7 +65,7 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
     <div className="flex">
       {/* Sidebar with filters */}
       <div className="hidden w-1/5 p-4 lg:block">
-        <FilterComponent books={filteredBooks} />
+        <FilterComponent books={booksData} />
       </div>
 
       {/* Main content area */}

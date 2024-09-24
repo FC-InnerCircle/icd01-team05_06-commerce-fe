@@ -40,20 +40,20 @@ const PriceFilter = () => {
           <li>
             <input
               type="radio"
-              id="price-5000"
+              id="price-0-10000"
               name="price"
-              value="5000"
+              value="0-9999"
               className="mr-2"
               onChange={handlePriceChange}
             />
-            <label htmlFor="price-5000">5천원 이하</label>
+            <label htmlFor="price-0-10000">1만원미만</label>
           </li>
           <li>
             <input
               type="radio"
               id="price-10000-30000"
               name="price"
-              value="10000-30000"
+              value="10000-29999"
               className="mr-2"
               onChange={handlePriceChange}
             />
@@ -64,7 +64,7 @@ const PriceFilter = () => {
               type="radio"
               id="price-30000-50000"
               name="price"
-              value="30000-50000"
+              value="30000-49999"
               className="mr-2"
               onChange={handlePriceChange}
             />
@@ -75,7 +75,7 @@ const PriceFilter = () => {
               type="radio"
               id="price-50000"
               name="price"
-              value="50000"
+              value="50000-999999"
               className="mr-2"
               onChange={handlePriceChange}
             />
