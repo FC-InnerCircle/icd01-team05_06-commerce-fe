@@ -1,6 +1,6 @@
 'use server';
 
-import { externalApi } from '@/lib/api';
+import { api } from '@/lib/api';
 import type { ApiResponse } from '@/types/api-types';
 import { MyReviewResponse } from '@/types/my-review-type';
 import { getHeadersWithToken } from './utils/action-helper';
@@ -12,7 +12,7 @@ export const getMyReviews = async (): Promise<MyReviewResponse> => {
     throw new Error('No token found');
   }
 
-  const response = await externalApi
+  const response = await api
     .get('product/v1/reviews/me', { headers })
     .json<ApiResponse<MyReviewResponse>>();
 
@@ -21,4 +21,20 @@ export const getMyReviews = async (): Promise<MyReviewResponse> => {
   }
 
   return response.data;
+};
+
+export const deleteReview = async (id: number) => {
+  const headers = await getHeadersWithToken();
+
+  if (!headers) {
+    throw new Error('No token found');
+  }
+
+  const response = await api
+    .delete(`product/v1/reviews/${id}`, { headers })
+    .json<ApiResponse<null>>();
+
+  if (!response.success) {
+    throw new Error(response.error?.message);
+  }
 };

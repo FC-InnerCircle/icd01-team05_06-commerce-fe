@@ -1,4 +1,4 @@
-import { getMyReviews } from '@/app/actions/my-review-action';
+import Link from 'next/link';
 import {
   Table,
   TableBody,
@@ -7,8 +7,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import Link from 'next/link';
 import StarRating from '@/components/common/star-rating';
+import { getMyReviews } from '@/app/actions/my-review-action';
+import DeleteAlertDialog from './components/delete-alert-dialog';
 
 const Page = async () => {
   const { reviews } = await getMyReviews();
@@ -24,6 +25,7 @@ const Page = async () => {
               <TableHead className="w-24 text-center">상품</TableHead>
               <TableHead className="w-36 text-center">내용</TableHead>
               <TableHead className="w-8 text-center">점수</TableHead>
+              <TableHead className="w-8 text-center">삭제</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -38,6 +40,9 @@ const Page = async () => {
                 <TableCell className="truncate">{review.content}</TableCell>
                 <TableCell className="truncate">
                   <StarRating rating={review.score} />
+                </TableCell>
+                <TableCell className="truncate">
+                  <DeleteAlertDialog reviewId={review.reviewId} />
                 </TableCell>
               </TableRow>
             ))}
