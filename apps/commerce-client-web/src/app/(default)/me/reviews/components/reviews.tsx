@@ -15,12 +15,12 @@ import { getMyReviews } from '@/app/actions/my-review-action';
 import DeleteAlertDialog from './delete-alert-dialog';
 
 const Reviews = () => {
-  const {
-    data: { reviews = [] },
-  } = useQuery({
+  const { data } = useQuery({
     queryKey: ['me', 'reviews'],
-    queryFn: getMyReviews,
+    queryFn: () => getMyReviews(),
   });
+
+  const reviews = data?.reviews ?? [];
 
   return (
     <div className="overflow-x-auto">

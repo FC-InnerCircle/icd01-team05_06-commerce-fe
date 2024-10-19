@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { XIcon } from 'lucide-react';
 import {
   AlertDialog,
@@ -20,7 +20,14 @@ interface DeleteAlertDialogProps {
 }
 
 const DeleteAlertDialog = ({ reviewId }: DeleteAlertDialogProps) => {
-  const handleClick = useCallback(() => deleteReview(reviewId), [reviewId]);
+  const queryClient = useQueryClient();
+
+  const { mutate: handleClick } = useMutation({
+    mutationFn: () => deleteReview(reviewId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['me', 'reviews'] });
+    },
+  });
 
   return (
     <AlertDialog>
