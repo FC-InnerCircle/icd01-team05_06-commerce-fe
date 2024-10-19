@@ -19,10 +19,10 @@ interface DeleteAlertDialogProps {
   reviewId: number;
 }
 
-const DeleteAlertDialog = ({ reviewId }: DeleteAlertDialogProps) => {
+const DeleteDialog = ({ reviewId }: DeleteAlertDialogProps) => {
   const queryClient = useQueryClient();
 
-  const { mutate: handleClick } = useMutation({
+  const { mutate } = useMutation({
     mutationFn: () => deleteReview(reviewId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['me', 'reviews'] });
@@ -42,11 +42,11 @@ const DeleteAlertDialog = ({ reviewId }: DeleteAlertDialogProps) => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>취소</AlertDialogCancel>
-          <AlertDialogAction onClick={handleClick}>삭제</AlertDialogAction>
+          <AlertDialogAction onClick={() => mutate()}>삭제</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
   );
 };
 
-export default DeleteAlertDialog;
+export default DeleteDialog;
