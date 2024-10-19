@@ -12,7 +12,8 @@ import {
 } from '@/components/ui/table';
 import StarRating from '@/components/common/star-rating';
 import { getMyReviews } from '@/app/actions/my-review-action';
-import DeleteAlertDialog from './delete-alert-dialog';
+import DeleteDialog from './delete-dialog';
+import EditDialog from '@/app/(default)/me/reviews/components/edit-dialog';
 
 const Reviews = () => {
   const { data } = useQuery({
@@ -28,9 +29,10 @@ const Reviews = () => {
         <TableHeader>
           <TableRow className="text-center">
             <TableHead className="hidden w-16 text-center md:table-cell">작성일자</TableHead>
-            <TableHead className="w-24 text-center">상품</TableHead>
-            <TableHead className="w-36 text-center">내용</TableHead>
+            <TableHead className="w-12 text-center">상품</TableHead>
+            <TableHead className="w-12 text-center">내용</TableHead>
             <TableHead className="w-8 text-center">점수</TableHead>
+            <TableHead className="w-8 text-center">수정</TableHead>
             <TableHead className="w-8 text-center">삭제</TableHead>
           </TableRow>
         </TableHeader>
@@ -48,7 +50,10 @@ const Reviews = () => {
                 <StarRating rating={review.score} />
               </TableCell>
               <TableCell className="truncate">
-                <DeleteAlertDialog reviewId={review.reviewId} />
+                <EditDialog review={review} />
+              </TableCell>
+              <TableCell className="truncate">
+                <DeleteDialog reviewId={review.reviewId} />
               </TableCell>
             </TableRow>
           ))}
