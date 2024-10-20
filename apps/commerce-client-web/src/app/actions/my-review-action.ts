@@ -22,3 +22,47 @@ export const getMyReviews = async (): Promise<MyReviewResponse> => {
 
   return response.data;
 };
+
+interface EditReviewParams {
+  reviewId: number;
+  content: string;
+  score: number;
+}
+
+export const editReview = async ({ reviewId, content, score }: EditReviewParams) => {
+  const headers = await getHeadersWithToken();
+
+  if (!headers) {
+    throw new Error('No token found');
+  }
+
+  const response = await api
+    .patch(`product/v1/reviews/${reviewId}`, {
+      headers,
+      body: JSON.stringify({
+        content,
+        score,
+      }),
+    })
+    .json<ApiResponse<null>>();
+
+  if (!response.success) {
+    throw new Error(response.error?.message);
+  }
+};
+
+export const deleteReview = async (id: number) => {
+  const headers = await getHeadersWithToken();
+
+  if (!headers) {
+    throw new Error('No token found');
+  }
+
+  const response = await api
+    .delete(`product/v1/reviews/${id}`, { headers })
+    .json<ApiResponse<null>>();
+
+  if (!response.success) {
+    throw new Error(response.error?.message);
+  }
+};
