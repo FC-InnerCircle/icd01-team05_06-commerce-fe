@@ -42,7 +42,7 @@ const SearchBar = () => {
         <div className="relative w-full max-w-sm">
           <Input
             className="border-input placeholder:text-muted-foreground focus-visible:ring-ring flex h-9 w-full rounded-full border bg-transparent py-2 pl-5 pr-10 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50"
-            placeholder="찾으려는 책을 검색해보세요."
+            placeholder="책을 검색해보세요."
             type="search"
             {...methods.register('searchTerm')}
           />

@@ -68,7 +68,7 @@ const Header = async () => {
         </div>
 
         {/* 검색 바 (모바일에서 숨김) */}
-        <div className="mx-4 hidden w-full flex-1 md:flex">
+        <div className="mx-4 w-full flex-1">
           <Suspense>
             <SearchBar />
           </Suspense>
