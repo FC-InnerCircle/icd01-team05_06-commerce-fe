@@ -1,6 +1,7 @@
 # icd01-team05_06-commerce-fe
 
 ## 개요
+
 <div style="display: flex; flex-direction: row;">
   <img width="28%" alt="image" src="https://github.com/user-attachments/assets/1e3727e7-698b-4ecc-a37d-61c30801a58d">
   <img width="28%" alt="image" src="https://github.com/user-attachments/assets/d19a37bb-f69f-4e70-976b-52454f2cfa6e">
@@ -11,6 +12,7 @@
 도서 이커머스 '이너북스' 프로젝트 입니다. Next.js와 TypeScript로 개발되었으며, 상태 관리를 위해 **zustand**, UI 구성 요소에 **shadcn** , 스타일링에 **tailwindcss** , 데이터 요청을 위해 **ky**를 사용합니다. **App Router**를 사용하여 효율적인 라우팅을 구현했습니다.
 
 ## 기능
+
 - **도서 검색 및 상세 정보**
   - 도서 검색 및 도서 상세 조회
   - 도서 리뷰 조회 및 작성 기능을 제공
@@ -25,6 +27,7 @@
   - 나의 리뷰 내역 조회 및 수정
 
 ## 개발 스케줄
+
 - **에러 핸들링 구현**: `server action` 및 `router handler`에 **try-catch를 사용한 에러 핸들링** 작업 예정
 - **단위 테스트**: **Vitest** 기반의 단위 테스트 코드 작성 예정(~24.10.26)
 - **통합 테스트**: **Playwright** 기반의 통합 테스트 코드 작성 예정(~24.11.03)
@@ -39,21 +42,27 @@
 ## 시작하기
 
 ### 의존성 설치
+
 ```bash
 pnpm install
 ```
 
 ### 환경변수 설정
+
 apps/commerce-client-web 경로에 .env 파일을 생성
+
 ```bash
 NEXT_PUBLIC_EXTERNAL_API_URL=https://76ztyqn6fe.execute-api.ap-northeast-2.amazonaws.com/
 ```
 
 ### 애플리케이션 실행
+
 루트 폴더에서 아래의 명령어 실행
+
 ```bash
 pnpm run dev:client
 ```
 
 ## 배포링크
+
 https://commerce-innerbooks.vercel.app/
