@@ -1,9 +1,9 @@
 'use server';
 
-import { api } from '@/lib/api';
 import type { ApiResponse } from '@/types/api-types';
 import { MyReviewResponse } from '@/types/my-review-type';
 import { getHeadersWithToken } from './utils/action-helper';
+import { api } from '@/lib/api';
 
 export const getMyReviews = async (): Promise<MyReviewResponse> => {
   const headers = await getHeadersWithToken();

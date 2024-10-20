@@ -54,6 +54,7 @@ export interface Orderer {
 }
 
 export interface OrderProduct {
+  name: string;
   id: number;
   title: string;
   author: string;
@@ -62,6 +63,15 @@ export interface OrderProduct {
   quantity: number;
   price: number;
   discountedPrice: number;
+}
+
+export interface CreatedOrdersResponse {
+  id: number;
+  orderNumber: string;
+  orderStatus: string;
+  orderDate: string;
+  products: OrderProduct[];
+  error: string | null;
 }
 
 export interface DeliveryInfo {
