@@ -24,8 +24,6 @@ export const login = async (formData: LoginFormData) => {
   }
 
   setTokenInfo(response.data.tokenInfo);
-
-  redirect('/');
 };
 
 export const signUp = async (formData: SignupFormData) => {
