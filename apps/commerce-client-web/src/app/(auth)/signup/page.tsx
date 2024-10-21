@@ -27,7 +27,7 @@ const JoinPage = () => {
   const [isAgreedPrivacy, setIsAgreedPrivacy] = useState(false);
   const [isAgreedTerms, setIsAgreedTerms] = useState(false);
   const [showAlertDialog, setShowAlertDialog] = useState(false);
-  const { signupData } = useAuthStore();
+  const { signupData, setLoginState } = useAuthStore();
 
   const handleStepClick = (index: number) => {
     if (index === 0) {
@@ -64,6 +64,7 @@ const JoinPage = () => {
           password: signupData.password,
         };
         await login(loginData);
+        setLoginState(true);
         setStep(step + 1);
       } catch (error) {
         console.error('Error during signup:', error);
