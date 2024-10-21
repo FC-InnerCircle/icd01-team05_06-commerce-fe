@@ -28,36 +28,42 @@ const orderStatusTitles: Record<OrderStatus, string> = {
 const OrderTable = ({ orders }: OrderTableProps) => {
   return (
     <div className="overflow-x-auto">
-      <Table className="table-fixed text-xs">
-        <TableHeader>
-          <TableRow className="text-center">
-            <TableHead className="hidden w-24 text-center md:table-cell">주문번호</TableHead>
-            <TableHead className="w-20 text-center">주문일자</TableHead>
-            <TableHead className="w-36 text-center">주문내역</TableHead>
-            <TableHead className="w-24 text-center">주문금액</TableHead>
-            <TableHead className="hidden w-20 text-center md:table-cell">주문상태</TableHead>
-            <TableHead className="hidden w-20 text-center md:table-cell">주문자</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {orders.map((order) => (
-            <TableRow key={order.orderNumber} className="text-center text-xs">
-              <TableCell className="hidden truncate md:table-cell">
-                <Link className="text-blue-700" href={`/me/orders/${order.orderNumber}`}>
-                  {order.orderNumber}
-                </Link>
-              </TableCell>
-              <TableCell>{formatDate(order.orderDate)}</TableCell>
-              <TableCell className="truncate">{order.content}</TableCell>
-              <TableCell className="truncate">{order.price.toLocaleString()}원</TableCell>
-              <TableCell className="hidden md:table-cell">
-                {orderStatusTitles[order.status]}
-              </TableCell>
-              <TableCell className="hidden md:table-cell">{order.memberName}</TableCell>
+      {orders.length === 0 ? (
+        <div className="flex h-32 items-center justify-center rounded-lg bg-slate-50">
+          <p className="text-sm text-gray-500">주문 내역이 없습니다.</p>
+        </div>
+      ) : (
+        <Table className="table-fixed text-xs">
+          <TableHeader>
+            <TableRow className="text-center">
+              <TableHead className="hidden w-24 text-center md:table-cell">주문번호</TableHead>
+              <TableHead className="w-20 text-center">주문일자</TableHead>
+              <TableHead className="w-36 text-center">주문내역</TableHead>
+              <TableHead className="w-24 text-center">주문금액</TableHead>
+              <TableHead className="hidden w-20 text-center md:table-cell">주문상태</TableHead>
+              <TableHead className="hidden w-20 text-center md:table-cell">주문자</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {orders.map((order) => (
+              <TableRow key={order.orderNumber} className="text-center text-xs">
+                <TableCell className="hidden truncate md:table-cell">
+                  <Link className="text-blue-700" href={`/me/orders/${order.orderNumber}`}>
+                    {order.orderNumber}
+                  </Link>
+                </TableCell>
+                <TableCell>{formatDate(order.orderDate)}</TableCell>
+                <TableCell className="truncate">{order.content}</TableCell>
+                <TableCell className="truncate">{order.price.toLocaleString()}원</TableCell>
+                <TableCell className="hidden md:table-cell">
+                  {orderStatusTitles[order.status]}
+                </TableCell>
+                <TableCell className="hidden md:table-cell">{order.memberName}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
     </div>
   );
 };
