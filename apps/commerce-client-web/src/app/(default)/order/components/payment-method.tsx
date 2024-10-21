@@ -80,7 +80,7 @@ const PaymentMethod = () => {
               <Label className="mb-1 block text-xs text-slate-500">입금자명</Label>
               <Input
                 type="text"
-                placeholder="입금자명 (미입력시 주문자명)"
+                placeholder="입금자명"
                 value={depositorName}
                 onChange={handleDepositorNameChange}
               />
