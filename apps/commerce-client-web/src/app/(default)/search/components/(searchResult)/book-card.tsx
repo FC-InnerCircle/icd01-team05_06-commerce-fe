@@ -2,7 +2,6 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation'; // useRouter 훅 가져오기
-import { parseAndRoundPrice } from '@/lib/utils';
 import { Product } from '@/types/product-types'; // Import the useCartStore hook
 import AddToCartButton from '@/app/(default)/cart/components/cart-add-button';
 import PaymentAddButton from '@/app/(default)/order/components/payment-add-button';
@@ -15,8 +14,6 @@ export type BookCardProps = {
 const BookCard = ({ id, book }: BookCardProps) => {
   const router = useRouter(); // useRouter 훅 사용
   const maxLength = 100; // 최대 출력할 글자 수
-
-  const roundedPrice = parseAndRoundPrice(book.price); // 유틸리티 함수 사용
 
   const handleNavigate = () => {
     router.push(`/details/${id}`);
@@ -55,7 +52,7 @@ const BookCard = ({ id, book }: BookCardProps) => {
                   {book.discountedPrice.toLocaleString()}원
                 </span>
                 <span className="text-xs text-slate-400 line-through lg:text-sm">
-                  {roundedPrice.toLocaleString()}원
+                  {book.price.toLocaleString()}원
                 </span>
               </>
             ) : (

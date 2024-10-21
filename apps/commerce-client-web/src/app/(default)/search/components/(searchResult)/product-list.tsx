@@ -1,5 +1,6 @@
 'use client';
 
+import { useSearchParams } from 'next/navigation';
 import CustomPagination from '@/components/common/custom-pagenation';
 import { Product } from '@/types/product-types';
 import { Pagination } from '@/types/pagination-types';
@@ -11,6 +12,17 @@ interface ProductListProps {
 }
 
 const ProductList = ({ books, pagination }: ProductListProps) => {
+  const searchParams = useSearchParams();
+
+  const generatePageLink = (page: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    // Update or add the page parameter
+    params.set('page', page.toString());
+
+    return `?${params.toString()}`;
+  };
+
   return (
     <div>
       <SearchResult books={books} />
@@ -21,7 +33,7 @@ const ProductList = ({ books, pagination }: ProductListProps) => {
           totalPage={pagination.totalPage}
           hasNext={pagination.hasNextPage}
           hasPrev={pagination.hasPreviousPage}
-          generatePageLink={(page) => `?page=${page}`} // Define how the link should look
+          generatePageLink={generatePageLink} // Use the modified function
         />
       )}
     </div>
