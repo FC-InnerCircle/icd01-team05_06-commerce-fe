@@ -1,6 +1,6 @@
 import StarRating from '@/components/common/star-rating';
 import { Button } from '@/components/ui/button';
-import { parseAndRoundPrice, calculationDiscountRate } from '@/lib/utils';
+import { calculationDiscountRate } from '@/lib/utils';
 import { Product } from '@/types/product-types';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -11,8 +11,6 @@ interface ProductSummuryProps {
 }
 
 const ProductSummury = ({ book }: ProductSummuryProps) => {
-  const originalPrice = parseAndRoundPrice(book.price);
-  const discountedPrice = parseAndRoundPrice(book.discountedPrice);
   const discountRate = calculationDiscountRate(book.price, book.discountedPrice);
 
   return (
@@ -63,10 +61,12 @@ const ProductSummury = ({ book }: ProductSummuryProps) => {
             <div className="py-4">
               <div className="grid grid-cols-[120px_1fr] items-center gap-y-2 text-sm">
                 <div className="w-28 font-extralight text-slate-500">정가</div>
-                <div className="text-left font-extrabold line-through">{originalPrice}원</div>
+                <div className="text-left font-extrabold line-through">
+                  {book.price.toLocaleString()}원
+                </div>
                 <div className="w-28 font-extralight text-slate-500">판매가</div>
                 <div className="text-destructive text-left text-base">
-                  <span className="font-extrabold">{discountedPrice}원</span>
+                  <span className="font-extrabold">{book.discountedPrice.toLocaleString()}원</span>
                   <span className="ml-1 text-xs font-light">({discountRate}%)</span>
                 </div>
               </div>
