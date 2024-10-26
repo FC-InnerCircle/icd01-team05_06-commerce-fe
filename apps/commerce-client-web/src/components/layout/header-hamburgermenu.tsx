@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { MainMenu } from '@/types/menu-types';
 import Link from 'next/link';
 import { useAuthStore } from '@/stores/use-auth-store';
 import { logout } from '@/app/actions/auth-action';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import { useUserStore } from '@/stores/use-user-store';
 import { ShoppingCartIcon } from 'lucide-react';
 
@@ -23,6 +23,7 @@ const myPageMenu = [
 const HamburgerMenu = ({ mainMenu }: HamburgerMenuProps) => {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams(); // Use searchParams to preserve existing queries
   const { isLoggedIn, resetAuthState } = useAuthStore();
   const { resetUserState } = useUserStore();
 
@@ -61,8 +62,11 @@ const HamburgerMenu = ({ mainMenu }: HamburgerMenuProps) => {
 
   const toggleCategory = (index: number, type?: string) => {
     if (type) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('type', type); // Set new type while preserving existing params
+
       closeMenu();
-      router.push(`/search?type=${type}`);
+      router.push(`${pathname}?${params.toString()}`);
     } else {
       if (activeCategory === index) {
         setActiveCategory(null);
@@ -168,7 +172,10 @@ const HamburgerMenu = ({ mainMenu }: HamburgerMenuProps) => {
                                     <Link
                                       href={{
                                         pathname: '/search',
-                                        query: { category: item.id },
+                                        query: {
+                                          ...Object.fromEntries(searchParams.entries()), // Preserve existing params
+                                          category: item.id?.toString() ?? '',
+                                        },
                                       }}
                                       onClick={closeMenu}
                                     >
