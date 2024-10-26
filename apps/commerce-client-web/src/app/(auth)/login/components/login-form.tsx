@@ -73,6 +73,8 @@ const LoginForm = () => {
         setShowAlertDialog(true);
         setIsLoading(false);
         reset();
+      } finally {
+        setIsLoading(false);
       }
     },
     [reset, setLoginData],
