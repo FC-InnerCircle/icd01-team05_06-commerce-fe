@@ -5,9 +5,8 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
 import { usePaymentStore } from '@/stores/use-payment-store';
-import DaumPostcode from 'react-daum-postcode';
 import { useState } from 'react';
-import Modal from '@/components/common/modal';
+import PostAddressModal, { PostAddress } from '@/components/common/post-address-modal';
 
 const PaymentShippingInfo = () => {
   const shippingInfo = usePaymentStore((state) => state.shippingInfo);
@@ -19,12 +18,14 @@ const PaymentShippingInfo = () => {
     setShippingInfo({ ...shippingInfo, [name]: value });
   };
 
-  const handleCompletePostcode = (data: { zonecode: string; address: string }) => {
+  const handleCompletePostcode = (data: PostAddress) => {
+    const { zonecode, address } = data;
+
     setIsModalOpen(false);
     setShippingInfo({
       ...shippingInfo,
-      postalCode: data.zonecode,
-      address: data.address,
+      postalCode: zonecode || '',
+      address: address || '',
     });
   };
 
@@ -114,9 +115,11 @@ const PaymentShippingInfo = () => {
           </div>
         </div>
       </CardContent>
-      <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <DaumPostcode onComplete={handleCompletePostcode} />
-      </Modal>
+      <PostAddressModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onComplete={handleCompletePostcode}
+      />
     </Card>
   );
 };
