@@ -81,13 +81,17 @@ const Header = async () => {
 
         {/* 모바일용 햄버거 메뉴 */}
         <div className="flex md:hidden">
-          <HamburgerMenu mainMenu={mainMenu} />
+          <Suspense>
+            <HamburgerMenu mainMenu={mainMenu} />
+          </Suspense>
         </div>
       </div>
 
       {/* 메뉴바 (모바일에서 숨김) */}
       <div className="max-w-screen-xs container mx-auto mt-4 hidden sm:max-w-screen-md md:block md:h-fit md:max-w-screen-lg">
-        <HeaderMenubar mainMenu={mainMenu} />
+        <Suspense>
+          <HeaderMenubar mainMenu={mainMenu} />
+        </Suspense>
       </div>
     </header>
   );
