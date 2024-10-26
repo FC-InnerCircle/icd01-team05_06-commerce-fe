@@ -6,6 +6,10 @@ import useCartStore from '@/stores/use-cart-store';
 import { useRouter } from 'next/navigation';
 import AlertDialogComponent from '@/components/common/alert-dialog';
 import { Product } from '@/types/product-types';
+import { useAuthStore } from '@/stores/use-auth-store'; // Import useAuthStore
+import { useToast } from '@/components/ui/use-toast'; // Import useToast for login alert
+import { ToastAction } from '@/components/ui/toast';
+import Link from 'next/link';
 
 interface PaymentForOrderButtonProps {
   text: string;
@@ -15,6 +19,8 @@ interface PaymentForOrderButtonProps {
 const PaymentAddButton = ({ text, book }: PaymentForOrderButtonProps) => {
   const router = useRouter();
   const { addItemToCart } = useCartStore();
+  const { isLoggedIn } = useAuthStore(); // Access login state
+  const { toast } = useToast(); // Initialize toast
   const [showDialog, setShowDialog] = useState(false);
   const queryString = `productId=${book?.id}&quantity=${1}`;
 
@@ -25,16 +31,29 @@ const PaymentAddButton = ({ text, book }: PaymentForOrderButtonProps) => {
   const goPayment = (e: { stopPropagation: () => void }) => {
     e.stopPropagation();
 
+    if (!isLoggedIn) {
+      toast({
+        title: '로그인이 필요합니다',
+        description: '상품을 바로 구매하려면 로그인이 필요합니다.',
+        action: (
+          <div className="mt-4 flex w-full justify-end">
+            <ToastAction altText="로그인 페이지로 이동" className="border-slate-600">
+              <Link href="/login">로그인</Link>
+            </ToastAction>
+          </div>
+        ),
+        duration: 3000,
+        className: 'max-w-2xl p-8 flex flex-col justify-between',
+      });
+      return;
+    }
+
     if (book && book.discountedPrice < 1) {
-      alert('품절상품입니다');
+      alert('This product is out of stock');
       return;
     }
 
     const currentPath = window.location.pathname;
-    /**
-     * todo
-     * 장바구니 상품조회를 여기에하면 너무 많은 리소스를 차지해서 추후에 다시 구현해보겠습니다.
-     */
     const selectedProducts = [];
 
     if (currentPath === '/cart' && selectedProducts.length > 0) {
@@ -46,7 +65,7 @@ const PaymentAddButton = ({ text, book }: PaymentForOrderButtonProps) => {
         buyOnlyOneBook();
       }
     } else {
-      alert('상품을 선택해주세요.');
+      alert('Please select a product.');
     }
   };
 
@@ -66,20 +85,21 @@ const PaymentAddButton = ({ text, book }: PaymentForOrderButtonProps) => {
   const handleDialogCancel = () => {
     setShowDialog(false);
   };
+
   return (
     <>
       <Button onClick={goPayment} className="w-full">
         {text}
       </Button>
 
-      {/* 함께 구매 여부 확인을 위한 다이얼로그 */}
+      {/* Dialog for confirming purchase with items in cart */}
       {showDialog && (
         <AlertDialogComponent
-          title="장바구니에 상품이 있습니다"
-          description="장바구니 확인 후 함께 구매하시겠습니까?"
+          title="You have items in your cart"
+          description="Do you want to review your cart before purchasing together?"
           onConfirm={handleDialogConfirm}
           onCancel={handleDialogCancel}
-          thirdButtonName={'바로구매'}
+          thirdButtonName="Buy Now"
           onThirdAction={handleDialogBuyJustOne}
         />
       )}
