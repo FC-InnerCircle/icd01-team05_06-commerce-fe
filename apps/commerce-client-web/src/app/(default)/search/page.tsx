@@ -1,8 +1,9 @@
 import FilterComponent from './components/(filters)/filter-component';
-import { fetchProducts } from '@/app/actions/product-action';
+
 import { ProductsResponse } from '@/types/product-types';
 import ProductList from './components/(searchResult)/product-list';
 import { extractSearchParams, ProductsSearchParams } from '@/lib/product-params';
+import { fetchProducts } from '@/app/actions/product-action';
 
 interface SearchPageProps {
   searchParams: ProductsSearchParams;
@@ -19,7 +20,7 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
   return (
     <div className="flex">
       <div className="hidden w-1/5 p-4 lg:block">
-        <FilterComponent books={filteredBooks} />
+        <FilterComponent />
       </div>
 
       <div className="w-full p-4 lg:w-4/5">
