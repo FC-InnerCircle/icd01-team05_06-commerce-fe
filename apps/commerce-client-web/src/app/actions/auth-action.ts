@@ -44,21 +44,26 @@ export const signUp = async (formData: SignupFormData) => {
 export const logout = async () => {
   const headers = await getHeadersWithToken();
 
-  if (!headers) {
-    throw new Error('No token found');
-  }
+  try {
+    if (!headers) {
+      throw new Error('No token found');
+    }
 
-  const response = await api
-    .post('auth/v1/logout', {
-      headers,
-    })
-    .json<ApiResponse<null>>();
+    const response = await api
+      .post('auth/v1/logout', {
+        headers,
+      })
+      .json<ApiResponse<null>>();
 
-  if (!response.success) {
-    throw new Error(response.error?.message);
+    if (!response.success) {
+      throw new Error(response.error?.message);
+    }
+  } catch (error) {
+    console.error('Error logging out:', error);
+  } finally {
+    removeTokenInfo();
+    redirect('/');
   }
-  removeTokenInfo();
-  redirect('/');
 };
 
 export const getUserInfo = async (): Promise<UserInfo> => {
@@ -91,7 +96,6 @@ export const updateUserInfo = async (
     throw new Error('No token found');
   }
 
-  // Create a shallow copy of the userInfo and filter out password if it's not provided
   const filteredUserInfo = { ...userInfo };
 
   if (!filteredUserInfo.password) {
@@ -100,7 +104,7 @@ export const updateUserInfo = async (
 
   const response = await api
     .put('auth/v1/update', {
-      body: JSON.stringify(filteredUserInfo), // Send filtered userInfo
+      body: JSON.stringify(filteredUserInfo),
       headers: {
         'Content-Type': 'application/json',
         'auth-token': authToken,
@@ -166,21 +170,24 @@ export const verifyPassword = async (password: string): Promise<AuthToken> => {
 export const deleteUserAccount = async () => {
   const headers = await getHeadersWithToken();
 
-  if (!headers) {
-    throw new Error('No token found');
+  try {
+    if (!headers) {
+      throw new Error('No token found');
+    }
+
+    const response = await api
+      .delete('auth/v1/withdrawal', {
+        headers,
+      })
+      .json<ApiResponse<null>>();
+
+    if (!response.success) {
+      throw new Error(response.error?.message);
+    }
+  } catch (error) {
+    console.error('Error deleting user account:', error);
+  } finally {
+    removeTokenInfo();
+    redirect('/');
   }
-
-  const response = await api
-    .delete('auth/v1/withdrawal', {
-      headers,
-    })
-    .json<ApiResponse<null>>();
-
-  if (!response.success) {
-    throw new Error(response.error?.message);
-  }
-
-  removeTokenInfo();
-
-  redirect('/');
 };
