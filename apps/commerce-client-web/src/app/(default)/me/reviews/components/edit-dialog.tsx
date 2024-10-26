@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { MyReview } from '@/types/my-review-type';
+import { MyReview, MyReviewResponse } from '@/types/my-review-type';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -27,7 +27,26 @@ const EditDialog = ({ review }: EditDialogProps) => {
 
   const { mutate } = useMutation({
     mutationFn: () => editReview({ reviewId: review.reviewId, content, score: review.score }),
-    onSuccess: () => {
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: ['me', 'reviews'] });
+
+      const prev = queryClient.getQueryData<MyReviewResponse>(['me', 'reviews']);
+
+      const nextReviews =
+        prev?.reviews.map((v) =>
+          v.reviewId === review.reviewId ? { ...v, content, score: v.score } : v,
+        ) ?? [];
+
+      const next = { ...prev, reviews: nextReviews };
+
+      queryClient.setQueryData<MyReviewResponse>(['me', 'reviews'], next);
+
+      return { prev };
+    },
+    onError: (_, __, context) => {
+      queryClient.setQueryData(['me', 'reviews'], context?.prev);
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['me', 'reviews'] });
     },
   });
