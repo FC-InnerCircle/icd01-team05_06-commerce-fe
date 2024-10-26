@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { deleteReview } from '@/app/actions/my-review-action';
+import { MyReviewResponse } from '@/types/my-review-type';
 
 interface DeleteAlertDialogProps {
   reviewId: number;
@@ -24,7 +25,23 @@ const DeleteDialog = ({ reviewId }: DeleteAlertDialogProps) => {
 
   const { mutate } = useMutation({
     mutationFn: () => deleteReview(reviewId),
-    onSuccess: () => {
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: ['me', 'reviews'] });
+
+      const prev = queryClient.getQueryData<MyReviewResponse>(['me', 'reviews']);
+
+      const nextReviews = prev?.reviews.filter((v) => v.reviewId !== reviewId) ?? [];
+
+      const next = { ...prev, reviews: nextReviews };
+
+      queryClient.setQueryData<MyReviewResponse>(['me', 'reviews'], next);
+
+      return { prev };
+    },
+    onError: (_, __, context) => {
+      queryClient.setQueryData(['users'], context?.prev);
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['me', 'reviews'] });
     },
   });
