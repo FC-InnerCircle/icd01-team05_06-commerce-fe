@@ -14,6 +14,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
+import { queries } from '@/queries';
 import { editReview } from '@/app/actions/my-review-action';
 
 interface EditDialogProps {
@@ -28,9 +29,9 @@ const EditDialog = ({ review }: EditDialogProps) => {
   const { mutate } = useMutation({
     mutationFn: () => editReview({ reviewId: review.reviewId, content, score: review.score }),
     onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: ['me', 'reviews'] });
+      await queryClient.cancelQueries({ queryKey: queries.me.reviews.queryKey });
 
-      const prev = queryClient.getQueryData<MyReviewResponse>(['me', 'reviews']);
+      const prev = queryClient.getQueryData<MyReviewResponse>(queries.me.reviews.queryKey);
 
       const nextReviews =
         prev?.reviews.map((v) =>
@@ -39,15 +40,15 @@ const EditDialog = ({ review }: EditDialogProps) => {
 
       const next = { ...prev, reviews: nextReviews };
 
-      queryClient.setQueryData<MyReviewResponse>(['me', 'reviews'], next);
+      queryClient.setQueryData<MyReviewResponse>(queries.me.reviews.queryKey, next);
 
       return { prev };
     },
     onError: (_, __, context) => {
-      queryClient.setQueryData(['me', 'reviews'], context?.prev);
+      queryClient.setQueryData(queries.me.reviews.queryKey, context?.prev);
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['me', 'reviews'] });
+      queryClient.invalidateQueries({ queryKey: queries.me.reviews.queryKey });
     },
   });
 
