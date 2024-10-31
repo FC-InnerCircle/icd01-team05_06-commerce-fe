@@ -28,6 +28,7 @@ export const InputField = <T extends FieldValues>({
     <FormControl>
       <Input
         {...register(name)}
+        data-testid={name}
         id={name}
         type={type}
         placeholder={placeholder}
