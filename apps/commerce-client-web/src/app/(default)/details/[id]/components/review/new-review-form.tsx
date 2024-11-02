@@ -25,10 +25,8 @@ const NewReviewForm = ({ productId, onReviewSubmitted }: NewReviewFormProps) => 
     try {
       const reviewData: SubmitReviewData = { ...data, productId, score: rating };
 
-      console.log('reviewData:', reviewData);
-
       await submitReview(reviewData);
-      await submitReview({ ...data, productId, score: rating });
+
       reset();
       setRating(5);
       onReviewSubmitted();
