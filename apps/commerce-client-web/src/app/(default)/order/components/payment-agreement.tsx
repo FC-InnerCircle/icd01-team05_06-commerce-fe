@@ -9,14 +9,15 @@ import { Button } from '@/components/ui/button';
 import { usePaymentStore } from '@/stores/use-payment-store';
 import { createOrder } from '@/app/actions/order-action';
 import { useWithLoadingAsync } from '@/components/common/with-loading-spinner';
-import Modal from '@/components/common/modal';
+
 import { CreatedOrdersResponse } from '@/types/order-types';
+import PaymentConfirmationDialog from './payment-confirm-dialog';
 
 const PaymentAgreement = () => {
   const router = useRouter();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [orderNumber, setOrderNumber] = useState<string | null>(null);
-  const [orderedBooks, setOrderedBooks] = useState<{ title: string; quantity: number }[]>([]); // 주문한 책 정보 저장
+  const [orderedBooks, setOrderedBooks] = useState<{ title: string; quantity: number }[]>([]);
 
   const {
     orderBooks,
@@ -87,9 +88,7 @@ const PaymentAgreement = () => {
     try {
       const response = await wrappedOrderCreation();
 
-      if (!response) {
-        return;
-      }
+      if (!response) return;
 
       if (response.orderStatus === 'COMPLETED') {
         setOrderNumber(response.orderNumber);
@@ -99,7 +98,7 @@ const PaymentAgreement = () => {
             quantity: product.quantity,
           })),
         );
-        setIsModalOpen(true);
+        setIsDialogOpen(true);
       } else {
         throw new Error(response.error || 'Unknown error occurred');
       }
@@ -108,10 +107,11 @@ const PaymentAgreement = () => {
       alert('주문 생성에 실패했습니다. 다시 시도해 주세요.');
     }
   };
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
     resetState();
-    router.push('/'); // 홈으로 이동
+    router.push('/');
   };
 
   return (
@@ -157,31 +157,12 @@ const PaymentAgreement = () => {
         </Button>
       </CardFooter>
 
-      <Modal open={isModalOpen} onClose={handleCloseModal}>
-        <p className="mb-4 text-lg font-semibold">주문이 성공적으로 완료되었습니다!</p>
-        {orderNumber && (
-          <p className="mb-4">
-            주문 번호: <strong>{orderNumber}</strong>
-          </p>
-        )}
-
-        <table className="w-full border-collapse border border-gray-300">
-          <thead>
-            <tr>
-              <th className="border border-gray-300 px-4 py-2">책 이름</th>
-              <th className="border border-gray-300 px-4 py-2">수량</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orderedBooks.map((book, index) => (
-              <tr key={index}>
-                <td className="border border-gray-300 px-4 py-2">{book.title}</td>
-                <td className="border border-gray-300 px-4 py-2">{book.quantity}개</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </Modal>
+      <PaymentConfirmationDialog
+        isOpen={isDialogOpen}
+        orderNumber={orderNumber}
+        orderedBooks={orderedBooks}
+        onClose={handleCloseDialog}
+      />
     </Card>
   );
 };

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { MyReview } from '@/types/my-review-type';
+import { MyReview, MyReviewResponse } from '@/types/my-review-type';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -14,6 +14,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
+import { queries } from '@/queries';
 import { editReview } from '@/app/actions/my-review-action';
 
 interface EditDialogProps {
@@ -27,8 +28,27 @@ const EditDialog = ({ review }: EditDialogProps) => {
 
   const { mutate } = useMutation({
     mutationFn: () => editReview({ reviewId: review.reviewId, content, score: review.score }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['me', 'reviews'] });
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: queries.me.reviews.queryKey });
+
+      const prev = queryClient.getQueryData<MyReviewResponse>(queries.me.reviews.queryKey);
+
+      const nextReviews =
+        prev?.reviews.map((v) =>
+          v.reviewId === review.reviewId ? { ...v, content, score: v.score } : v,
+        ) ?? [];
+
+      const next = { ...prev, reviews: nextReviews };
+
+      queryClient.setQueryData<MyReviewResponse>(queries.me.reviews.queryKey, next);
+
+      return { prev };
+    },
+    onError: (_, __, context) => {
+      queryClient.setQueryData(queries.me.reviews.queryKey, context?.prev);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: queries.me.reviews.queryKey });
     },
   });
 

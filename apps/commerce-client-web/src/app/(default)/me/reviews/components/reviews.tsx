@@ -11,13 +11,14 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import StarRating from '@/components/common/star-rating';
+import { queries } from '@/queries';
 import { getMyReviews } from '@/app/actions/my-review-action';
 import DeleteDialog from './delete-dialog';
 import EditDialog from '@/app/(default)/me/reviews/components/edit-dialog';
 
 const Reviews = () => {
   const { data } = useQuery({
-    queryKey: ['me', 'reviews'],
+    queryKey: queries.me.reviews.queryKey,
     queryFn: () => getMyReviews(),
   });
 
