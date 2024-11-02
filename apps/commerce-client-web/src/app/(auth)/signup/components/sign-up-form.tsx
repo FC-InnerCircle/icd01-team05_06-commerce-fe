@@ -1,4 +1,4 @@
-import { useForm, FormProvider } from 'react-hook-form';
+import { useForm, FormProvider, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SignupSchema } from '@/schemas/auth-schema';
 import PostAddressModal, { PostAddress } from '@/components/common/post-address-modal';
@@ -17,9 +17,8 @@ const SignUpForm = ({ onSubmit, onValidChange }: SignUpFormProps) => {
   const { signupData, setSignupData } = useAuthStore();
   const [isPostAddressModalOpen, setIsPostAddressModalOpen] = useState(false);
 
-  // Initialize react-hook-form with zod resolver for validation
   const methods = useForm<SignupFormData>({
-    resolver: zodResolver(SignupSchema), // Link with your zod validation schema
+    resolver: zodResolver(SignupSchema),
     defaultValues: signupData,
     mode: 'onChange',
   });
@@ -28,24 +27,25 @@ const SignUpForm = ({ onSubmit, onValidChange }: SignUpFormProps) => {
     handleSubmit,
     formState: { errors, isValid },
     register,
+    setValue,
+    trigger,
   } = methods;
+
+  const allValues = useWatch({ control: methods.control });
 
   const handleCompletePostcode = (data: PostAddress) => {
     const { zonecode, address } = data;
 
-    // Use setValue from react-hook-form to update the form state
-    methods.setValue('postalCode', zonecode || '');
-    methods.setValue('streetAddress', address || '');
+    setValue('postalCode', zonecode || '');
+    setValue('streetAddress', address || '');
 
-    // Optionally, trigger validation after setting values
-    methods.trigger(['postalCode', 'streetAddress']);
+    trigger(['postalCode', 'streetAddress']);
   };
 
-  // Pass validation state to the parent component
   useEffect(() => {
     onValidChange(isValid);
-    setSignupData(methods.getValues());
-  }, [isValid]);
+    setSignupData(allValues);
+  }, [isValid, allValues, onValidChange, setSignupData]);
 
   return (
     <div>

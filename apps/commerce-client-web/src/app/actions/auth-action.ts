@@ -27,17 +27,24 @@ export const login = async (formData: LoginFormData) => {
 };
 
 export const signUp = async (formData: SignupFormData) => {
-  const response = await api
-    .post('auth/v1/sign-up', {
-      body: JSON.stringify(formData),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    .json<ApiResponse<null>>();
+  try {
+    console.log('formData:', formData);
 
-  if (!response.success) {
-    throw new Error(response.error?.message);
+    const response = await api
+      .post('auth/v1/sign-up', {
+        body: JSON.stringify(formData),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .json<ApiResponse<null>>();
+
+    if (!response.success) {
+      throw new Error(response.error?.message);
+    }
+  } catch (error) {
+    console.error('Error during signup:', error);
+    throw error;
   }
 };
 
