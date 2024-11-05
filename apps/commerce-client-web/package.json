@@ -73,6 +73,7 @@
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^14.2.5",
+    "@playwright/test": "^1.48.2",
     "@tanstack/eslint-plugin-query": "^5.53.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.5.0",
