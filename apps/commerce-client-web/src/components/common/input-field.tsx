@@ -21,17 +21,21 @@ export const InputField = <T extends FieldValues>({
   errors,
   disabled,
   register,
+  ...props
 }: InputFieldProps<T>) => (
   <FormItem className="w-full">
     {label && <FormLabel htmlFor={name as string}>{label}</FormLabel>}
     <FormControl>
       <Input
         {...register(name)}
+        data-testid={name}
+        id={name}
         type={type}
         placeholder={placeholder}
         maxLength={maxLength}
         disabled={disabled}
         className="text-xs"
+        {...props}
       />
     </FormControl>
     {errors && <FormMessage className="mt-1 text-xs">{errors}</FormMessage>}
